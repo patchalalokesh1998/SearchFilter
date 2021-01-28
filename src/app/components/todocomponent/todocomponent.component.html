@@ -1,0 +1,231 @@
+
+<div class="container">
+
+
+    <div class="jumbotron">
+        <div class="time" style="float: right;">
+            {{ time | date: 'medium' }}
+        </div>
+        <h1 style="display:inline-block;">Task Managment System</h1>
+        <p class="lead">In to todays busy life we help to manage your daily activites and tasks in one single click.</p>
+        <button class="btn btn-primary" (click)="openModal(template)">Add a new task</button>
+        <button class="btn btn-primary ml-4" (click)="openModalcompleted(completed)">Completed Tasks</button>
+    </div>
+
+       <div style="text-align: center; font-weight: bold; font-size: large; color:red" *ngIf="errmess; else noerrorblock">
+         {{errmess}}
+
+       </div>   
+       <ng-template #noerrorblock>
+        <div  *ngIf="formsdata">
+            <div *ngIf="formsdata.length; else elseblock">
+                <div class="row">
+            <div *ngFor="let data of formsdata">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                     <!-- <div *ngIf="checkdeadline(data)"></div> -->
+                <div class="card" *ngIf="checkdeadline(data.dateofcom);else elseblock2" style="width: 18rem;">
+                    <div class="card-body">
+                      <h3 class="card-title" style="text-align: center; font-weight: bold;">{{data.taskname}}</h3>
+                      <div>
+                        <b>Task Name:</b> {{data.taskname}}
+                      </div>
+                      <div>
+                        <b>Task dead line:</b> {{data.dateofcom}}
+                      </div>
+                      <div style="background-color: rgb(188, 226, 188);">
+                        <b>Time remaining:</b> {{livedeadline(data.dateofcom)}}
+                      </div>
+                      <div class="mb-2">
+                        <b>Percentage of work completed</b>
+                        <progressbar [animate]="false" [value]="data.percentage" type="success"><b>{{data.percentage}}%</b></progressbar>
+                      </div>                  
+                    </div>
+    
+                    <div class="card-footer">
+                        <button class="btn btn-danger labelmargin mr-3" (click)="openModaldelete(delete,data)">Delete Task</button>
+                        <button class= "btn btn-primary labelmargin" (click)="openModalupdate(update,data)" >Update Task</button>
+                    </div>
+                  </div>
+                  <!-- deadline exceed taskes -->
+                  <ng-template #elseblock2>
+                    <div class="card"  style="width: 18rem;">
+                        <div class="card-body">
+                          <h5 class="card-title" style="text-align: center; font-weight: bold;">{{data.taskname}}</h5>
+                          <div>
+                            <b>Task Name:</b> {{data.taskname}}
+                          </div>
+                          <div>
+                            <b style="background-color: red;">This Task has exceeded the dead line:</b> {{data.dateofcom}}
+                            <p> <b style="background-color: red;">Please Click on the update button to reset the deadline</b></p>  
+                        </div>
+                          <div class="mb-2">
+                            <b>Percentage of work Completed</b>
+                            <progressbar [animate]="false" [value]="data.percentage" type="success"><b>{{data.percentage}}%</b></progressbar>
+                          </div>                  
+                        </div>
+        
+                        <div class="card-footer">
+                            <button class="btn btn-danger labelmargin" disabled="true" (click)="openModaldelete(delete,data)">Delete Task</button>
+                            <button class= "btn btn-primary labelmargin" (click)="openModalupdate(update,data)" >Update Task</button>
+                        </div>
+                      </div>
+        
+                  </ng-template>
+                  </div>
+            </div>
+            </div>
+        </div>
+        </div>
+       
+    <ng-template #elseblock>
+        <div style="width:100%;height:400px; text-align:center; vertical-align: middle;">
+            <h3 style="color: green;">No Tasks are present Please add a task</h3>
+        </div>
+
+    </ng-template>
+       </ng-template>
+
+</div>
+<!-- insert task -->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add task</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="tasksubmit()">
+        <div class="form-group row">
+            <label>Enter task name:</label>
+            <input class="form-control" name="taskname" formControlName="taskname" type="text" placeholder="Enter task name" [ngClass]="{'is-invalid':form.get('taskname').invalid && form.get('taskname').touched}">
+            <div class="invalid-feedback">
+                <div *ngIf="form.get('taskname').hasError('required')">
+                    task name should not be empty
+                </div>
+             </div>
+        </div>
+        <div class="form-group row">
+            <label>Enter the day to complete the task:</label>
+            <input class="form-control" type="date"  name="date"  formControlName="dateofcom" [ngClass]="{'is-invalid':form.get('dateofcom').invalid && form.get('dateofcom').touched}">
+            <div class="invalid-feedback">
+                <div *ngIf="form.get('dateofcom').hasError('required')">
+                    This field should not be empty
+                </div>
+                <div *ngIf="form.get('dateofcom').hasError('dateerror')">
+                    Enter the date correctly
+                </div>
+            </div> 
+            <!-- angular materials -->
+        </div>
+        <div style="text-align: center;">
+        <button class="btn btn-primary" [disabled]="form.invalid">Submit form</button>
+        <div class="deletemess" *ngIf="insertmessage">
+            <h4 style="color:green; text-align: center; font-weight: bold;">Task got Inserted Sucessfully</h4>
+          </div>
+
+        </div>
+    </form>
+    <div style="text-align: center; font-weight: bold; font-size: large; color:red" *ngIf="errmess">
+        {{errmess}} Please try some time later Sorry for the Inconvinence
+      </div> 
+  </div>
+</ng-template>
+
+<!-- deletetask -->
+<ng-template #delete>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Delete task</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+       <h4 style="background-color: red; text-align: center; font-weight: bold;">Are you sure that you want to delete this task</h4>
+       <button class="btn btn-danger" style="text-align: center;" (click)="deletetask()">Delete</button>
+       <div class="deletemess" *ngIf="deletemessage">
+         <h4 style="color:green; text-align: center; font-weight: bold;">Task got deleted sucessfully</h4>
+       </div>
+       <div style="text-align: center; font-weight: bold; font-size: large; color:red" *ngIf="errmess">
+        {{errmess}} Please try some time later Sorry for the Inconvinence
+      </div> 
+    </div>
+</ng-template>
+
+<!-- updatetask -->
+<ng-template #update>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Update Task</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="changedform" (ngSubmit)="updatetask()">
+            <div class="form-group">
+                <label>
+                    Update the dead line
+                </label>
+                <input type="date" formControlName="dateofcom"  class="form-control" name="date" [ngClass]="{'is-invalid':changedform.get('dateofcom').invalid && changedform.get('dateofcom').touched}">
+                <div *ngIf="invalid-feedback">
+    
+                    <div *ngIf="changedform.get(dateofcom).hasError('dateerror')">
+                        This field should not be empty
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>
+                  Enter the percentage of work done out of 100
+                </label>
+                <input type="number" formControlName="percentage" [placeholder]="datatochange.percentage" class="form-control" name="percentage">
+            </div>
+       <button class="btn btn-danger" style="text-align: center;" [disabled]="changedform.invalid">update</button>
+       <div class="updatemess" *ngIf="updatemessage">
+        <h4 style="color:green; text-align: center; font-weight: bold;">Task got  sucessfully updated</h4>
+      </div>
+      <div class="updatemess" *ngIf="completedsucessmess">
+        <h4 style="color:green; text-align: center; font-weight: bold;">Congratulation you completed this task!</h4>
+      </div>  
+      <div style="text-align: center; font-weight: bold; font-size: large; color:red" *ngIf="errmess">
+        {{errmess}} Please try some time later Sorry for the Inconvinence
+      </div>   
+        </form>
+        </div>
+</ng-template>
+<!-- completed task -->
+<ng-template #completed>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Completed Task</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <table *ngIf="completedtasks; else noncompletedtaskes" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Start date</th>
+                    <th>Completed date</th>
+                    <th>deadlinetocomplete</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of completedtasks">
+                    <td>{{data.taskname}}</td>
+                    <td>{{data.startdate}}</td>
+                    <td>{{data.completeddate}}</td>
+                    <td>{{data.dateofcom}}</td>
+                    
+                </tr>            
+            </tbody>
+        </table>
+        <ng-template #noncompletedtaskes>
+            <div style="text-align: center; color:green; font-weight: bold;">No completed taskes found</div>
+        </ng-template>
+    </div>
+</ng-template>
+
+

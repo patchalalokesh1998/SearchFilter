@@ -1,0 +1,47 @@
+
+<div class="jumbotron">
+    <h1><a routerLink="/sellersaddproduct" style="text-decoration: none; color:black">Inventory Managment Stystem</a></h1>
+    <div>
+        <button class="btn btn-primary" style="float: right;" routerLink="/sellersaddproduct">Home</button>
+    </div>
+    <div style="clear: both;">
+        <button class="btn btn-primary mt-2 ml-2" [ngStyle]="{'background-color':electronicsbuttonactive?'green':'blue'}" (click)="Electronics()">Electronics</button>
+    
+    <button class="btn btn-primary mt-2 ml-2" [ngStyle]="{'background-color':foodbuttonactive?'green':'blue'}" (click)="fooditems()">Food Items</button>
+
+    <button class="btn btn-primary mt-2 ml-2" [ngStyle]="{'background-color':clothingbuttonactive?'green':'blue'}" (click)="clothing()">Clothing</button>
+    <button class="btn btn-primary mt-2 ml-2" [ngStyle]="{'background-color':totalanalysisbutton?'green':'blue'}" (click)="analysis()">Total Analysis</button>
+    </div>
+    
+    </div>
+    
+
+    <div>
+        <div *ngIf="maininfo">
+          <div class="chart" >
+            <canvas baseChart
+              [data]="pieChartData"
+              [labels]="pieChartLabels"
+              [chartType]="pieChartType"
+              [options]="pieChartOptions"
+              [colors]="pieChartColors">
+            </canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="container" *ngIf="allproducts==false">
+        <div *ngFor="let info of analysisinfo">
+            <alert type="danger">
+               <strong>Product Name</strong> {{info.productname}} <strong>{{info.daysleft}}</strong> days left To become out of stock
+              </alert>
+          </div>
+      </div>
+      
+
+      <!-- (click)="pieChartLegend=!pieChartLegend" -->
+      <!-- <button mat-button mat-raised-button color="primary" >Toggle Legend</button> -->
+        <!-- <button mat-button mat-raised-button color="primary" (click)="changeLabels()">Change Labels</button>
+        <button mat-button mat-raised-button color="primary" (click)="addSlice()">Add Slice</button>
+        <button mat-button mat-raised-button color="primary" (click)="removeSlice()">Remove Slice</button>
+        <button mat-button mat-raised-button color="primary" (click)="changeLegendPosition()">Change Legend Position</button> -->

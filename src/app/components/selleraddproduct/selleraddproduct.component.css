@@ -1,0 +1,16 @@
+.card
+{
+    width:100%;
+}
+@media (min-width: 768px)  {
+    .card
+    {
+     width:721px;
+    }
+ }
+@media (min-width: 769px)  {
+   .card
+   {
+    width:900px;
+   }
+}

@@ -1,0 +1,41 @@
+.tags
+{
+    /* color:black;  */
+    font-weight: bold;
+     text-decoration: none;
+      border-radius: 8%;
+     
+      
+}
+.tags:hover
+{
+    background-color: grey;
+    color:white;
+}
+.active
+{
+    
+    background-color: grey;
+    color:white;
+    text-decoration: none;
+    border-radius:10%;
+}
+input[type="search"]::placeholder {      
+    text-align: center; 
+}
+.searchdiv
+{
+    background-color:#f8f9fa;
+     width:97%;
+     height:50px;
+      border-bottom-color: white;
+       border-bottom-style:solid;
+}
+.searchdiv:hover{
+    background-color: rgb(156, 156, 247);
+
+}
+/* .content:hover
+{
+    color:white;
+} */

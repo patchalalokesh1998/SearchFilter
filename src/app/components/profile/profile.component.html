@@ -1,0 +1,92 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light" style="position: relative;">
+    
+        <h4 class="content tags" style="margin-top:16px; margin-left:4px;
+        margin-right:4px">Customer details</h4>
+        
+        <div class="navbar-nav ml-auto">
+            <div><input type="search" placeholder="search" style="padding:5px;" [(ngModel)]="inputsearch" (keyup)="searchTerm.next(inputsearch);searchdisplay=true"><div style="display: inline-block; background-color: black; padding:7px;"><i class="fa fa-search" style="color:white" aria-hidden="true"></i></div></div>
+        </div>
+
+    <!-- <a href="#" class="ml-4 tags"> -->
+        <!-- <img src="images/logo.svg" height="28" alt="CoolBrand"> -->
+        <!-- <h4 class="content" style="margin-top:16px; margin-left:4px;
+        margin-right:4px;">Edit details</h4>
+    </a> -->
+    
+    
+</nav>
+<div *ngIf="searchResults && searchdisplay">
+    <div class="container" *ngFor="let searchinfo of searchResults" >
+       <div class="searchdiv"  (click)="hidesearch(searchinfo)"><p style="padding-top:15px; padding-left:10px;">{{searchinfo.name}}</p></div>
+        <!-- <div style="background-color:wheat; width:97%;height:50px; border-bottom-color: black; border-bottom-style:solid;" ><p style="padding-top:15px; padding-left:10px;">{{searchinfo.name}}</p></div> -->
+    </div>
+</div>
+
+<!-- <div class="container" style="color:grey"></div> -->
+
+<div class="container">
+    <div class="body">
+        <div *ngIf="searchpro">
+            <div class="card" style="max-width: 500px;">
+                <div class="row no-gutters">
+                    <div class="col-sm-5" >
+                        <img [src]="searchinfodis.image" class="card-img-top h-100 img-fluid" alt="..." style="max-width:100%; max-height: 174px;">
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="card-body">
+                            <h4 class="card-title">{{searchinfodis.name}}</h4>
+                            <div>
+                                <ul style="display: inline-block;  list-style-type: none;">
+                                    <li>
+                                       <strong>Name</strong> {{searchinfodis.name}}
+                                    </li>
+                                    <li>
+                                        <strong>Age</strong> {{searchinfodis.age}}
+                                     </li>
+                                </ul>
+                            </div>
+            <!-- <p class="card-text">Alice is a freelance web designer and developer based in London. She is specialized in HTML5, CSS3, JavaScript, Bootstrap, etc.</p> -->
+                            <a  class="btn btn-primary stretched-link" [routerLink]="['/profiledetails',searchinfodis.id]" >View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="row">
+        
+            <div *ngFor="let info of maininfo" class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2">
+                <div class="card" style="max-width: 500px;">
+                    <div class="row no-gutters">
+                        <div class="col-sm-5" >
+                            <img [src]="info.image" class="card-img-top h-100 img-fluid" alt="..." style="max-width:100%; max-height: 174px;">
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <h4 class="card-title">{{info.name}}</h4>
+                                <div>
+                                    <ul style="display: inline-block;  list-style-type: none;">
+                                        <li>
+                                           <strong>Name</strong> {{info.name}}
+                                        </li>
+                                        <li>
+                                            <strong>Age</strong> {{info.age}}
+                                         </li>
+                                    </ul>
+                                </div>
+                <!-- <p class="card-text">Alice is a freelance web designer and developer based in London. She is specialized in HTML5, CSS3, JavaScript, Bootstrap, etc.</p> -->
+                                <a  class="btn btn-primary stretched-link" [routerLink]="['/profiledetails',info.id]" (click)="getauth()" >View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+           
+           <div *ngIf="errormess" style=" font-weight: bold; margin-top:30px; color:red; width:100%;"><p style="text-align: center;">{{errormess}}</p>
+          <p style="text-align: center;">some thing went wrong try reloading the page or try after sometime</p>
+        </div>
+        
+       
+    </div>
+    </div>
+</div>
